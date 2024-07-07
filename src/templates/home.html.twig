@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Accueil{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <body>
+            <h1>Administration et sécurisation de serveur web</h1>
+    
+            <a href="{{ path('app_todo_list_index') }}" class="btn">Voir la liste des tâches</a>
+        </body>
+    </div>
+{% endblock %}

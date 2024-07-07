@@ -1,0 +1,42 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Administration Reseau | Todo list{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-10">
+                <h1 class="mt-4 mb-4 text-center">Liste des Tâches</h1>
+
+                {% if todo_lists|length > 0 %}
+                    <div class="table-responsive text-center mb-4">
+                        <table class="table table-bordered">
+                            <thead class="thead-dark">
+                                <tr>
+                                    <th scope="col">Titre</th>
+                                    <th scope="col" style="width: 40%;">Description</th>
+                                    <th scope="col">Fait</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for todo_list in todo_lists %}
+                                    <tr>
+                                        <td>{{ todo_list.title }}</td>
+                                        <td>{{ todo_list.description }}</td>
+                                        <td>{{ todo_list.done ? 'Oui' : 'Non' }}</td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                {% else %}
+                    <p class="text-center mb-4">Aucune tâche.</p>
+                {% endif %}
+
+                <div class="text-center" style="margin-top:20px">
+                    <a href="{{ path('app_todo_list_new') }}" class="btn btn-success">Créer une nouvelle tâche</a>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

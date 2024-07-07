@@ -1,0 +1,64 @@
+version: "3.8"
+
+services:
+
+  symfony:
+    build:
+      context: .
+      dockerfile: Dockerfile.symfony
+    container_name: symfony
+    depends_on:
+      - postgresql
+    environment:
+      DATABASE_URL: postgresql://${POSTGRES_USER:-postgres}:${POSTGRES_PASSWORD:-mydatabasepassword}@postgresql:5432/${POSTGRES_DB:-symfony_db}?serverVersion=${POSTGRES_VERSION:-15.6}
+    volumes:
+      - ./src:/var/www/html
+    ports:
+      - 8000:8000
+    networks:
+      - administration
+    restart: unless-stopped
+
+  postgresql:
+    image: postgres:latest
+    container_name: postgresql
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-symfony_db}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-mydatabasepassword}
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    networks:
+      - administration
+    
+  adminer:
+    image: adminer:latest
+    container_name: adminer
+    depends_on:
+      - postgresql
+    ports:
+      - "8080:8080"
+    networks:
+      - administration
+
+  nginx:
+    image: nginx:latest
+    container_name: nginx
+    depends_on:
+      - symfony
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx:/etc/nginx/conf.d
+      - ./src:/var/www/html
+    networks:
+      - administration
+
+volumes:
+  db_data:
+
+networks:
+  administration:
+    driver: bridge
