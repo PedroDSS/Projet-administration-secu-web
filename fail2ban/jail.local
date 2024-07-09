@@ -1,6 +1,6 @@
 [DEFAULT]
 ignoreip = 127.0.0.1/8
-bantime = 1h
+bantime = 3600
 findtime = 600
 maxretry = 3
 
@@ -19,3 +19,10 @@ logpath  = /var/log/nginx/access.log
 bantime  = 86400
 findtime = 300
 maxretry = 1
+
+[adminer]
+enabled  = true
+filter   = adminer
+action   = iptables-multiport[name=Adminer, port="8080"]
+logpath  = /var/log/nginx/adminer.log
+maxretry = 3

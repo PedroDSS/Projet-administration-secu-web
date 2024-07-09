@@ -41,8 +41,6 @@ services:
       - "8080:8080"
     # networks:
     #   - administration
-    # volumes:
-    #   - /var/log/adminer:/var/log/adminer:rw
 
   nginx:
     image: nginx:latest
@@ -54,7 +52,7 @@ services:
     volumes:
       - ./nginx:/etc/nginx/conf.d
       - ./src:/var/www/html
-      - /var/log/nginx:/var/log/nginx 
+      - /var/log/nginx:/var/log/nginx
       # networks:
       #   - administration
 
@@ -69,7 +67,6 @@ services:
       - ./fail2ban/jail.local:/etc/fail2ban/jail.local:ro
       - ./fail2ban/filter.d:/etc/fail2ban/filter.d:ro
       - /var/log/nginx:/var/log/nginx:ro
-      # - /var/log/adminer:/var/log/adminer:ro
       - fail2ban_data:/data
     depends_on:
       - nginx
