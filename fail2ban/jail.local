@@ -26,3 +26,10 @@ filter   = adminer
 action   = iptables-multiport[name=Adminer, port="8080"]
 logpath  = /var/log/nginx/adminer.log
 maxretry = 3
+
+[nginx-limit-req]
+enabled = true
+filter = nginx-limit-req
+action = iptables[name=LimitReq, port=http, protocol=tcp]
+logpath = /var/log/nginx/error.log
+maxretry = 5
