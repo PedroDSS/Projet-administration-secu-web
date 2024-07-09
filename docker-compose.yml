@@ -1,7 +1,6 @@
 version: "3.8"
 
 services:
-
   symfony:
     build:
       context: .
@@ -15,8 +14,8 @@ services:
       - ./src:/var/www/html
     ports:
       - 8000:8000
-    networks:
-      - administration
+    # networks:
+    #   - administration
     restart: unless-stopped
 
   postgresql:
@@ -30,8 +29,8 @@ services:
       POSTGRES_USER: ${POSTGRES_USER:-postgres}
     volumes:
       - db_data:/var/lib/postgresql/data
-    networks:
-      - administration
+    # networks:
+    #   - administration
     
   adminer:
     image: adminer:latest
@@ -40,8 +39,8 @@ services:
       - postgresql
     ports:
       - "8080:8080"
-    networks:
-      - administration
+    # networks:
+    #   - administration
 
   nginx:
     image: nginx:latest
@@ -53,12 +52,33 @@ services:
     volumes:
       - ./nginx:/etc/nginx/conf.d
       - ./src:/var/www/html
-    networks:
-      - administration
+      - /var/log/nginx:/var/log/nginx
+      # networks:
+      #   - administration
+
+  fail2ban:
+    image: crazymax/fail2ban:latest
+    container_name: fail2ban
+    network_mode: "host"
+    cap_add:
+      - NET_ADMIN
+      - NET_RAW
+    volumes:
+      - ./fail2ban/jail.local:/etc/fail2ban/jail.local:ro
+      - ./fail2ban/filter.d:/etc/fail2ban/filter.d:ro
+      - /var/log/nginx:/var/log/nginx:ro
+      - fail2ban_data:/data
+    depends_on:
+      - nginx
+      - adminer
+    # command: fail2ban-client -d start
+    # networks:
+    #   - administration
 
 volumes:
   db_data:
+  fail2ban_data:
 
-networks:
-  administration:
-    driver: bridge
+# networks:
+#   administration:
+#     driver: bridge
