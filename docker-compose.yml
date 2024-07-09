@@ -1,7 +1,6 @@
 version: "3.8"
 
 services:
-
   symfony:
     build:
       context: .
@@ -56,8 +55,23 @@ services:
     networks:
       - administration
 
+  fail2ban:
+    image: crazymax/fail2ban:latest
+    container_name: fail2ban
+    volumes:
+      - ./fail2ban/jail.local:/etc/fail2ban/jail.local:ro
+      - ./fail2ban/filter.d:/etc/fail2ban/filter.d:ro
+      - /var/log:/var/log:ro
+      - fail2ban_data:/data
+    depends_on:
+      - nginx
+      - adminer
+    networks:
+      - administration
+
 volumes:
   db_data:
+  fail2ban_data:
 
 networks:
   administration:

@@ -1,0 +1,42 @@
+[DEFAULT]
+ignoreip = 127.0.0.1/8
+bantime = 1h
+findtime = 600
+maxretry = 3
+
+[nginx-http-auth]
+enabled  = true
+filter   = nginx-http-auth
+action   = iptables[name=HTTP, port=http, protocol=tcp]
+logpath  = /var/log/nginx/error.log
+maxretry = 3
+
+[nginx-botsearch]
+enabled  = true
+filter   = nginx-botsearch
+action   = iptables-multiport[name=NoBots, port="http,https"]
+logpath  = /var/log/nginx/access.log
+bantime  = 86400
+findtime = 300
+maxretry = 1
+
+[adminer]
+enabled  = true
+filter   = adminer
+action   = iptables-multiport[name=Adminer, port="8080"]
+logpath  = /var/log/adminer/access.log
+maxretry = 3
+
+[sshd]
+enabled = true
+filter = sshd
+action = iptables[name=SSH, port=ssh, protocol=tcp]
+logpath = /var/log/auth.log
+maxretry = 3
+
+[nginx-limit-req]
+enabled = true
+filter = nginx-limit-req
+action = iptables[name=LimitReq, port=http, protocol=tcp]
+logpath = /var/log/nginx/error.log
+maxretry = 50
