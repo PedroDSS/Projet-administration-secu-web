@@ -22,13 +22,16 @@ Mise en place de toutes les bonnes pratiques vues en cours pour faire cet héber
 
 
 ## Configuration de Fail2Ban
-Le service `fail2ban` a été ajouté à notre configuration Docker Compose pour surveiller les logs de `nginx`, `adminer`, et `sshd`. Les fichiers de configuration de `fail2ban` se trouvent dans le répertoire `fail2ban` à la racine du projet.
+Pour surveille les logs du NGINX et les logs de Adminer 
+Le service `fail2ban` a été ajouté à notre configuration Docker Compose pour surveiller les logs de `nginx`, `adminer`. Les fichiers de configuration de `fail2ban` se trouvent dans le répertoire `fail2ban` à la racine du projet.
 
 ### Fichiers de configuration
 - `jail.local`: Configure les jails pour `nginx`, `adminer`, `sshd`, et `nginx-limit-req`.
 - `filter.d/nginx-http-auth.conf`: Filtre pour les échecs d'authentification HTTP Nginx.
 - `filter.d/nginx-botsearch.conf`: Filtre pour détecter les bots sur Nginx.
 - `filter.d/adminer.conf`: Filtre pour les échecs d'accès Adminer.
-- `filter.d/nginx-limit-req.conf`: Filtre pour les IPs dépassant les limites de requêtes configurées dans Nginx.
 
 Ces fichiers permettent à `fail2ban` de surveiller les tentatives de connexion échouées et de bannir les adresses IP suspectes.
+
+### cap_add
+La section accorde au conteneur des privilèges supplémentaires qui ne sont pas inclus par défaut. Voici ce que fait chaque fonctionnalité :
