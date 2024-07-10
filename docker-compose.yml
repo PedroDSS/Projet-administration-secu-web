@@ -56,8 +56,11 @@ services:
       - ./src:/var/www/html
       - /var/log/nginx:/var/log/nginx
       - /var/www/certbot:/var/www/certbot
+      - /etc/letsencrypt:/etc/letsencrypt
       # networks:
       #   - administration
+    restart: unless-stopped
+
 
   certbot:
     image: certbot/certbot
